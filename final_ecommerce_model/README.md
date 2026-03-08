@@ -5,35 +5,35 @@ tags:
 - feature-extraction
 - dense
 - generated_from_trainer
-- dataset_size:40000
+- dataset_size:31044
 - loss:CosineSimilarityLoss
 base_model: sentence-transformers/all-MiniLM-L6-v2
 widget:
-- source_sentence: Looking for the best weight lifting near me
+- source_sentence: Professional fast workstation for clinic
   sentences:
-  - Dumbbells (Photo 2)
-  - Weights Authenticity (Photo)
-  - Laptop Close-up (Photo)
-- source_sentence: Looking for the best fast workstation near me
+  - Pulse & BP Monitor (Clinic)
+  - Laptop User Photo
+  - Laptop Event Photo
+- source_sentence: I need a pulse check
   sentences:
-  - Clinic BP Station Photo (60)
-  - Laptop Portrait Photo
+  - Kitchen Appliance (Alfa MC5)
+  - Pill Organizer 7-Day Dispenser
+  - Laptop User Photo
+- source_sentence: pan for cooking with warranty
+  sentences:
+  - Wellness BP Monitor Photo
+  - Kitchen Cooking Set8 (BORA)
+  - Pulse & BP Monitor (Clinic)
+- source_sentence: Looking for the best dumbbells for gym near me
+  sentences:
+  - Kitchen Cooking Set (BORA)
+  - Aluminium Dumbbell
+  - Wellness BP Monitor Photo
+- source_sentence: Cheapest strength training for home
+  sentences:
+  - Asus VivoBook (Photo)
+  - Dumb Bells (Photo)
   - Gym Free Weights (Photo)
-- source_sentence: My doctor said I need a weight lifting
-  sentences:
-  - Gaming PC Setup (Photo)
-  - Dumbbells (Photo 2)
-  - Clinic BP Station Photo (60)
-- source_sentence: My doctor said I need a check my heart
-  sentences:
-  - Round Cake Ring (18cm)
-  - Dumbbells (Photo 1)
-  - Aneroid Sphygmomanometer (Classic)
-- source_sentence: pulse check with warranty
-  sentences:
-  - Copper Kettle (Single)
-  - Dumbbells (Photo 1)
-  - Museum BP Device Photo
 pipeline_tag: sentence-similarity
 library_name: sentence-transformers
 ---
@@ -88,9 +88,9 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer("sentence_transformers_model_id")
 # Run inference
 sentences = [
-    'pulse check with warranty',
-    'Museum BP Device Photo',
-    'Dumbbells (Photo 1)',
+    'Cheapest strength training for home',
+    'Gym Free Weights (Photo)',
+    'Dumb Bells (Photo)',
 ]
 embeddings = model.encode(sentences)
 print(embeddings.shape)
@@ -99,9 +99,9 @@ print(embeddings.shape)
 # Get the similarity scores for the embeddings
 similarities = model.similarity(embeddings, embeddings)
 print(similarities)
-# tensor([[1.0000, 0.9586, 0.0439],
-#         [0.9586, 1.0000, 0.0351],
-#         [0.0439, 0.0351, 1.0000]])
+# tensor([[1.0000, 0.9579, 0.9515],
+#         [0.9579, 1.0000, 0.9505],
+#         [0.9515, 0.9505, 1.0000]])
 ```
 
 <!--
@@ -146,19 +146,19 @@ You can finetune this model on your own dataset.
 
 #### Unnamed Dataset
 
-* Size: 40,000 training samples
+* Size: 31,044 training samples
 * Columns: <code>sentence_0</code>, <code>sentence_1</code>, and <code>label</code>
 * Approximate statistics based on the first 1000 samples:
   |         | sentence_0                                                                       | sentence_1                                                                       | label                                                            |
   |:--------|:---------------------------------------------------------------------------------|:---------------------------------------------------------------------------------|:-----------------------------------------------------------------|
   | type    | string                                                                           | string                                                                           | float                                                            |
-  | details | <ul><li>min: 6 tokens</li><li>mean: 8.69 tokens</li><li>max: 14 tokens</li></ul> | <ul><li>min: 5 tokens</li><li>mean: 7.47 tokens</li><li>max: 13 tokens</li></ul> | <ul><li>min: 0.01</li><li>mean: 0.83</li><li>max: 0.99</li></ul> |
+  | details | <ul><li>min: 6 tokens</li><li>mean: 8.69 tokens</li><li>max: 14 tokens</li></ul> | <ul><li>min: 5 tokens</li><li>mean: 7.54 tokens</li><li>max: 13 tokens</li></ul> | <ul><li>min: 0.01</li><li>mean: 0.81</li><li>max: 0.99</li></ul> |
 * Samples:
-  | sentence_0                                                | sentence_1                             | label             |
-  |:----------------------------------------------------------|:---------------------------------------|:------------------|
-  | <code>I need a cooking pot</code>                         | <code>Laptop Portrait (Photo 2)</code> | <code>0.09</code> |
-  | <code>something to gaming setup</code>                    | <code>Laptop Scene (Photo)</code>      | <code>0.89</code> |
-  | <code>Looking for the best coding computer near me</code> | <code>HP Pavilion dm1 (Photo)</code>   | <code>0.9</code>  |
+  | sentence_0                                             | sentence_1                                | label             |
+  |:-------------------------------------------------------|:------------------------------------------|:------------------|
+  | <code>I need a home workout gear</code>                | <code>Dumbbell (Photo)</code>             | <code>0.9</code>  |
+  | <code>Professional strength training for clinic</code> | <code>Dumb Bells (Photo)</code>           | <code>0.9</code>  |
+  | <code>Professional cooking pot for clinic</code>       | <code>Clinic BP Station Photo (61)</code> | <code>0.08</code> |
 * Loss: [<code>CosineSimilarityLoss</code>](https://sbert.net/docs/package_reference/sentence_transformer/losses.html#cosinesimilarityloss) with these parameters:
   ```json
   {
@@ -171,20 +171,17 @@ You can finetune this model on your own dataset.
 
 - `per_device_train_batch_size`: 32
 - `per_device_eval_batch_size`: 32
-- `num_train_epochs`: 2
+- `num_train_epochs`: 4
 - `multi_dataset_batch_sampler`: round_robin
 
 #### All Hyperparameters
 <details><summary>Click to expand</summary>
 
-- `overwrite_output_dir`: False
 - `do_predict`: False
 - `eval_strategy`: no
 - `prediction_loss_only`: True
 - `per_device_train_batch_size`: 32
 - `per_device_eval_batch_size`: 32
-- `per_gpu_train_batch_size`: None
-- `per_gpu_eval_batch_size`: None
 - `gradient_accumulation_steps`: 1
 - `eval_accumulation_steps`: None
 - `torch_empty_cache_steps`: None
@@ -194,58 +191,47 @@ You can finetune this model on your own dataset.
 - `adam_beta2`: 0.999
 - `adam_epsilon`: 1e-08
 - `max_grad_norm`: 1
-- `num_train_epochs`: 2
+- `num_train_epochs`: 4
 - `max_steps`: -1
 - `lr_scheduler_type`: linear
-- `lr_scheduler_kwargs`: {}
-- `warmup_ratio`: 0.0
+- `lr_scheduler_kwargs`: None
+- `warmup_ratio`: None
 - `warmup_steps`: 0
 - `log_level`: passive
 - `log_level_replica`: warning
 - `log_on_each_node`: True
 - `logging_nan_inf_filter`: True
-- `save_safetensors`: True
+- `enable_jit_checkpoint`: False
 - `save_on_each_node`: False
 - `save_only_model`: False
 - `restore_callback_states_from_checkpoint`: False
-- `no_cuda`: False
 - `use_cpu`: False
-- `use_mps_device`: False
 - `seed`: 42
 - `data_seed`: None
-- `jit_mode_eval`: False
 - `bf16`: False
 - `fp16`: False
-- `fp16_opt_level`: O1
-- `half_precision_backend`: auto
 - `bf16_full_eval`: False
 - `fp16_full_eval`: False
 - `tf32`: None
-- `local_rank`: 0
+- `local_rank`: -1
 - `ddp_backend`: None
-- `tpu_num_cores`: None
-- `tpu_metrics_debug`: False
 - `debug`: []
 - `dataloader_drop_last`: False
 - `dataloader_num_workers`: 0
 - `dataloader_prefetch_factor`: None
-- `past_index`: -1
 - `disable_tqdm`: False
 - `remove_unused_columns`: True
 - `label_names`: None
 - `load_best_model_at_end`: False
 - `ignore_data_skip`: False
 - `fsdp`: []
-- `fsdp_min_num_params`: 0
 - `fsdp_config`: {'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
-- `fsdp_transformer_layer_cls_to_wrap`: None
 - `accelerator_config`: {'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None}
 - `parallelism_config`: None
 - `deepspeed`: None
 - `label_smoothing_factor`: 0.0
 - `optim`: adamw_torch_fused
 - `optim_args`: None
-- `adafactor`: False
 - `group_by_length`: False
 - `length_column_name`: length
 - `project`: huggingface
@@ -256,7 +242,6 @@ You can finetune this model on your own dataset.
 - `dataloader_pin_memory`: True
 - `dataloader_persistent_workers`: False
 - `skip_memory_metrics`: True
-- `use_legacy_prediction_loop`: False
 - `push_to_hub`: False
 - `resume_from_checkpoint`: None
 - `hub_model_id`: None
@@ -266,22 +251,14 @@ You can finetune this model on your own dataset.
 - `hub_revision`: None
 - `gradient_checkpointing`: False
 - `gradient_checkpointing_kwargs`: None
-- `include_inputs_for_metrics`: False
 - `include_for_metrics`: []
 - `eval_do_concat_batches`: True
-- `fp16_backend`: auto
-- `push_to_hub_model_id`: None
-- `push_to_hub_organization`: None
-- `mp_parameters`: 
 - `auto_find_batch_size`: False
 - `full_determinism`: False
-- `torchdynamo`: None
-- `ray_scope`: last
 - `ddp_timeout`: 1800
 - `torch_compile`: False
 - `torch_compile_backend`: None
 - `torch_compile_mode`: None
-- `include_tokens_per_second`: False
 - `include_num_input_tokens_seen`: no
 - `neftune_noise_alpha`: None
 - `optim_target_modules`: None
@@ -291,6 +268,7 @@ You can finetune this model on your own dataset.
 - `liger_kernel_config`: None
 - `eval_use_gather_object`: False
 - `average_tokens_across_devices`: True
+- `use_cache`: False
 - `prompts`: None
 - `batch_sampler`: batch_sampler
 - `multi_dataset_batch_sampler`: round_robin
@@ -300,23 +278,25 @@ You can finetune this model on your own dataset.
 </details>
 
 ### Training Logs
-| Epoch | Step | Training Loss |
-|:-----:|:----:|:-------------:|
-| 0.4   | 500  | 0.071         |
-| 0.8   | 1000 | 0.0021        |
-| 1.2   | 1500 | 0.002         |
-| 1.6   | 2000 | 0.0019        |
-| 2.0   | 2500 | 0.0019        |
+| Epoch  | Step | Training Loss |
+|:------:|:----:|:-------------:|
+| 0.5149 | 500  | 0.0712        |
+| 1.0299 | 1000 | 0.0034        |
+| 1.5448 | 1500 | 0.0028        |
+| 2.0597 | 2000 | 0.0028        |
+| 2.5747 | 2500 | 0.0025        |
+| 3.0896 | 3000 | 0.0026        |
+| 3.6045 | 3500 | 0.0026        |
 
 
 ### Framework Versions
 - Python: 3.12.12
-- Sentence Transformers: 5.2.0
-- Transformers: 4.57.3
-- PyTorch: 2.9.0+cu126
+- Sentence Transformers: 5.2.3
+- Transformers: 5.0.0
+- PyTorch: 2.10.0+cu128
 - Accelerate: 1.12.0
-- Datasets: 4.4.2
-- Tokenizers: 0.22.1
+- Datasets: 4.6.1
+- Tokenizers: 0.22.2
 
 ## Citation
 

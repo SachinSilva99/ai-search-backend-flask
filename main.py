@@ -62,7 +62,7 @@ def search():
     hits = util.semantic_search(query_emb, catalog_embeddings, top_k=limit)[0]
 
     results = [{"productName": catalog_titles[hit['corpus_id']],
-                "confidenceScore": round(float(hit['score']), 4)} for hit in hits if float(hit['score']) > 0.10]
+                "confidenceScore": round(float(hit['score']), 4)} for hit in hits if float(hit['score']) > 0.80]
     return jsonify(results)
 
 # Endpoint to trigger a refresh without restarting the server
